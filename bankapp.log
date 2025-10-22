@@ -1,0 +1,7 @@
+2025-10-21 21:56:26,233 [main] INFO  com.bank.core.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-21 21:56:54,370 [main] INFO  com.bank.core.BankApp - Deleted account: 2
+2025-10-21 22:02:38,590 [main] INFO  com.bank.core.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-21 22:03:00,465 [main] INFO  com.bank.core.BankApp - Viewed all accounts
+2025-10-21 22:03:43,560 [main] WARN  com.bank.core.BankApp - Non-positive amount entered: -400.0
+2025-10-21 22:03:50,098 [main] INFO  com.bank.core.BankApp - Account created successfully: 4, Name: Devi, Balance: 400.0
+2025-10-21 22:04:22,536 [main] INFO  com.bank.core.BankApp - Viewed all accounts
