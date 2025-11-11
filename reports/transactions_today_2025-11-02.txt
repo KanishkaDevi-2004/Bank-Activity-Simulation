@@ -1,0 +1,19 @@
+===========================================
+        BANK TRANSACTION REPORT
+===========================================
+Date: 2025-11-02
+Report Type: TODAY
+
+AccountNo    Name                 Email                          Balance    LastTxType      Amount     TxDateTime               
+---------------------------------------------------------------------------------------------------------------
+5            kani                 kani@gmail.com                 1000.00    NO_TX           0.00       N/A                      
+6            kanishka             kanishka@gmail.com             10050.00   NO_TX           0.00       N/A                      
+7            Devi                 Devi@gmail.com                 20.00      NO_TX           0.00       N/A                      
+9            Kanishka Devi R      kanishkadevir@gmail.com        500.00     NO_TX           0.00       N/A                      
+
+===========================================
+Summary:
+===========================================
+Total Accounts : 4
+Total Balance  : 11570.0
+===========================================

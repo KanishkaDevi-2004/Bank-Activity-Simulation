@@ -1,0 +1,18 @@
+===========================================
+        BANK TRANSACTION REPORT
+===========================================
+Date: 2025-10-28
+Report Type: ALL
+
+AccountNo    Name            Balance    LastTxType           Amount     TxDateTime               
+---------------------------------------------------------------------------------------------
+5            kani            1000.00    NO_TRANSACTION       0.00       N/A                      
+6            kanishka        10050.00   NO_TRANSACTION       0.00       N/A                      
+7            Devi            20.00      NO_TRANSACTION       0.00       N/A                      
+
+===========================================
+Summary:
+===========================================
+Total Accounts : 3
+Total Balance  : 11070.0
+===========================================

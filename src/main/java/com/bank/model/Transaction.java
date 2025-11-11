@@ -3,30 +3,51 @@ package com.bank.model;
 import java.time.LocalDateTime;
 
 public class Transaction {
-    private int accountNo;
-    private String type;
-    private double amount;
-    private LocalDateTime dateTime;
 
-    public Transaction(int accountNo, String type, double amount, LocalDateTime dateTime) {
-        this.accountNo = accountNo;
-        this.type = type;
+    private final Integer id;
+    private final Integer senderAccount;
+    private final Integer receiverAccount;
+    private final double amount;
+    private final String transactionType;
+    private final String message;
+    private final LocalDateTime createdAt;
+
+    public Transaction(
+            Integer id,
+            Integer senderAccount,
+            Integer receiverAccount,
+            double amount,
+            String transactionType,
+            String message,
+            LocalDateTime createdAt
+    ) {
+        this.id = id;
+        this.senderAccount = senderAccount;
+        this.receiverAccount = receiverAccount;
         this.amount = amount;
-        this.dateTime = dateTime;
+        this.transactionType = transactionType;
+        this.message = message;
+        this.createdAt = createdAt;
     }
 
-    public int getAccountNo() { return accountNo; }
-    public String getType() { return type; }
+    public Integer getId() { return id; }
+    public Integer getSenderAccount() { return senderAccount; }
+    public Integer getReceiverAccount() { return receiverAccount; }
     public double getAmount() { return amount; }
-    public LocalDateTime getDateTime() { return dateTime; }
+    public String getTransactionType() { return transactionType; }
+    public String getMessage() { return message; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 
     @Override
     public String toString() {
         return "Transaction{" +
-                "Account=" + accountNo +
-                ", Type='" + type + '\'' +
-                ", Amount=" + amount +
-                ", Date=" + dateTime +
+                "id=" + id +
+                ", sender=" + senderAccount +
+                ", receiver=" + receiverAccount +
+                ", amount=" + amount +
+                ", type='" + transactionType + '\'' +
+                ", message='" + message + '\'' +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

@@ -2,10 +2,8 @@ package com.bank.report;
 
 import com.bank.model.Transaction;
 import com.bank.db.DBConnection;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.log4j.Logger;
+import com.bank.util.LoggerUtil;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,68 +20,102 @@ import java.util.List;
 
 public class ReportGenerator {
 
-    private static final Logger logger = Logger.getLogger(ReportGenerator.class);
+    private static final Logger logger = LoggerUtil.getLogger(ReportGenerator.class);
 
-
-
-    public static void generateReport(List<Transaction> transactions) {
+    public static void generateReport(List<Transaction> transactions, String reportType) {
         Connection con = null;
+
         try {
-            // Create directory if missing
             Path reportsDir = Paths.get("reports");
-            if (!Files.exists(reportsDir)) Files.createDirectory(reportsDir);
+            if (!Files.exists(reportsDir)) {
+                Files.createDirectory(reportsDir);
+                logger.info("Created reports directory at {}", reportsDir.toAbsolutePath());
+            }
 
             String date = LocalDate.now().toString();
-            File file = new File("reports/transactions_" + date + ".csv");
+            String fileName = "transactions_" +
+                    (reportType.equals("TODAY") ? "today_" + date : "all_" + date) + ".txt";
 
+            File file = new File("reports/" + fileName);
             con = DBConnection.getConnection();
 
-            // Fetch all account details from DB
-            String sql = "SELECT account_no, name, balance FROM accounts";
+            String sql = "SELECT account_no, name, email, balance FROM accounts";
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             double totalBalance = 0;
             int totalAccounts = 0;
 
-            CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-                    .setHeader("Account No", "Name", "Balance", "Last Transaction Type", "Last Transaction Amount", "Transaction DateTime")
-                    .build();
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                 CSVPrinter printer = new CSVPrinter(writer, csvFormat)) {
+                writer.write("===========================================\n");
+                writer.write("        BANK TRANSACTION REPORT\n");
+                writer.write("===========================================\n");
+                writer.write("Date: " + date + "\n");
+                writer.write("Report Type: " + reportType + "\n\n");
+
+                writer.write(String.format(
+                        "%-12s %-20s %-30s %-10s %-15s %-10s %-25s\n",
+                        "AccountNo", "Name", "Email", "Balance", "LastTxType", "Amount", "TxDateTime"
+                ));
+                writer.write("---------------------------------------------------------------------------------------------------------------\n");
 
                 while (rs.next()) {
+
                     int accNo = rs.getInt("account_no");
                     String name = rs.getString("name");
+                    String email = rs.getString("email");
                     double balance = rs.getDouble("balance");
+
                     totalAccounts++;
                     totalBalance += balance;
 
-                    // Find last transaction (if any)
                     Transaction lastTx = null;
+
                     for (Transaction t : transactions) {
-                        if (t.getAccountNo() == accNo) {
-                            if (lastTx == null || t.getDateTime().isAfter(lastTx.getDateTime())) {
+
+                        boolean matchesAccount =
+                                (t.getSenderAccount() != null && t.getSenderAccount() == accNo) ||
+                                        (t.getReceiverAccount() != null && t.getReceiverAccount() == accNo);
+
+                        boolean isToday = t.getCreatedAt().toLocalDate().equals(LocalDate.now());
+
+                        if (matchesAccount &&
+                                (reportType.equals("ALL") || (reportType.equals("TODAY") && isToday))) {
+
+                            if (lastTx == null || t.getCreatedAt().isAfter(lastTx.getCreatedAt())) {
                                 lastTx = t;
                             }
                         }
                     }
 
                     if (lastTx != null) {
-                        printer.printRecord(accNo, name, balance, lastTx.getType(), lastTx.getAmount(), lastTx.getDateTime());
+                        writer.write(String.format(
+                                "%-12d %-20s %-30s %-10.2f %-15s %-10.2f %-25s\n",
+                                accNo, name, email, balance,
+                                lastTx.getTransactionType(),
+                                lastTx.getAmount(),
+                                lastTx.getCreatedAt()
+                        ));
                     } else {
-                        printer.printRecord(accNo, name, balance, "NO_TRANSACTION", "0", "N/A");
+                        writer.write(String.format(
+                                "%-12d %-20s %-30s %-10.2f %-15s %-10s %-25s\n",
+                                accNo, name, email, balance, "NO_TX", "0.00", "N/A"
+                        ));
                     }
                 }
 
-                // Summary section
-                printer.println();
-                printer.printRecord("TOTAL ACCOUNTS", totalAccounts);
-                printer.printRecord("TOTAL BALANCE", totalBalance);
+                writer.write("\n===========================================\n");
+                writer.write("Summary:\n");
+                writer.write("===========================================\n");
+                writer.write("Total Accounts : " + totalAccounts + "\n");
+                writer.write("Total Balance  : " + totalBalance + "\n");
+                writer.write("===========================================\n");
+
+                writer.flush();
             }
 
-            logger.info("✅ Report generated successfully: " + file.getAbsolutePath());
+            logger.info("✅ {} Report generated successfully: {}", reportType, file.getAbsolutePath());
 
         } catch (Exception e) {
             logger.error("❌ Error generating report", e);

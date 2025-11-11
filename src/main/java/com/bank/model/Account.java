@@ -4,17 +4,22 @@ public class Account {
 
     private final int accountNo;   // Account number is immutable
     private final String name;     // Name is immutable
+    private final String email;    // Email is immutable
     private double balance;        // Balance can change
 
-    public Account(int accountNo, String name, double balance) {
+    public Account(int accountNo, String name, String email, double balance) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty");
+        }
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be empty");
         }
         if (balance < 0) {
             throw new IllegalArgumentException("Initial balance cannot be negative");
         }
         this.accountNo = accountNo;
         this.name = name;
+        this.email = email;
         this.balance = balance;
     }
 
@@ -25,6 +30,10 @@ public class Account {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public double getBalance() {
@@ -53,6 +62,6 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account No: " + accountNo + ", Name: " + name + ", Balance: ₹" + balance;
+        return "Account No: " + accountNo + ", Name: " + name + ", Email: " + email + ", Balance: ₹" + balance;
     }
 }

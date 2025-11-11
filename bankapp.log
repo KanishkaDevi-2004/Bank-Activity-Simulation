@@ -1,7 +1,128 @@
-2025-10-21 21:56:26,233 [main] INFO  com.bank.core.BankApp - ===== Bank Activity Simulator Started =====
-2025-10-21 21:56:54,370 [main] INFO  com.bank.core.BankApp - Deleted account: 2
-2025-10-21 22:02:38,590 [main] INFO  com.bank.core.BankApp - ===== Bank Activity Simulator Started =====
-2025-10-21 22:03:00,465 [main] INFO  com.bank.core.BankApp - Viewed all accounts
-2025-10-21 22:03:43,560 [main] WARN  com.bank.core.BankApp - Non-positive amount entered: -400.0
-2025-10-21 22:03:50,098 [main] INFO  com.bank.core.BankApp - Account created successfully: 4, Name: Devi, Balance: 400.0
-2025-10-21 22:04:22,536 [main] INFO  com.bank.core.BankApp - Viewed all accounts
+2025-10-21 21:56:26,233 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-21 21:56:54,370 [main] INFO  com.bank.Main.BankApp - Deleted account: 2
+2025-10-21 22:02:38,590 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-21 22:03:00,465 [main] INFO  com.bank.Main.BankApp - Viewed all accounts
+2025-10-21 22:03:43,560 [main] WARN  com.bank.Main.BankApp - Non-positive amount entered: -400.0
+2025-10-21 22:03:50,098 [main] INFO  com.bank.Main.BankApp - Account created successfully: 4, Name: Devi, Balance: 400.0
+2025-10-21 22:04:22,536 [main] INFO  com.bank.Main.BankApp - Viewed all accounts
+2025-10-22 15:32:53,599 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 15:33:13,772 [main] INFO  com.bank.Main.BankApp - Deleted all accounts, rows affected: 3
+2025-10-22 15:33:22,123 [main] ERROR com.bank.Main.BankApp - Database error during view balance/accounts.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1200)
+	at com.bank.Main.BankApp.viewBalance(BankApp.java:277)
+	at com.bank.Main.BankApp.start(BankApp.java:53)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 15:35:10,744 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 15:35:17,667 [main] ERROR com.bank.Main.BankApp - Database error during view balance/accounts.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1200)
+	at com.bank.Main.BankApp.viewBalance(BankApp.java:277)
+	at com.bank.Main.BankApp.start(BankApp.java:53)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:23:00,164 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 18:23:33,564 [main] WARN  com.bank.Main.BankApp - Invalid email entered:
+2025-10-22 18:23:46,320 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:142)
+	at com.bank.Main.BankApp.start(BankApp.java:44)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:24:04,648 [main] WARN  com.bank.Main.BankApp - Invalid integer input detected.
+2025-10-22 18:26:31,937 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 18:27:05,581 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:147)
+	at com.bank.Main.BankApp.start(BankApp.java:44)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:31:32,652 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 18:31:57,253 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:147)
+	at com.bank.Main.BankApp.start(BankApp.java:44)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:34:13,709 [main] INFO  com.bank.Main.BankApp - Bank Simulator exited by user.
+2025-10-22 18:34:25,687 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 18:34:45,757 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:147)
+	at com.bank.Main.BankApp.start(BankApp.java:44)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:40:03,083 [main] INFO  com.bank.Main.BankApp - Bank Simulator exited by user.
+2025-10-22 18:40:14,506 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 18:40:29,354 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:147)
+	at com.bank.Main.BankApp.start(BankApp.java:44)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:47:36,455 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:147)
+	at com.bank.Main.BankApp.start(BankApp.java:44)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:50:33,244 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 18:50:56,850 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:185)
+	at com.bank.Main.BankApp.start(BankApp.java:47)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:56:24,900 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 18:56:45,307 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:147)
+	at com.bank.Main.BankApp.start(BankApp.java:45)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 18:59:51,549 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 19:00:06,354 [main] ERROR com.bank.Main.BankApp - Database error during account creation.
+java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.bank.Main.BankApp.createAccount(BankApp.java:147)
+	at com.bank.Main.BankApp.start(BankApp.java:45)
+	at com.bank.Main.Main.main(Main.java:8)
+2025-10-22 19:08:07,304 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-10-22 19:08:25,281 [main] INFO  com.bank.Main.BankApp - Account created successfully: 5, Name: kani, Email: kani@gmail.com, Balance: 1000.0
+2025-10-22 19:09:04,132 [main] WARN  com.bank.Main.BankApp - Non-positive amount entered: -100.0
+2025-10-22 19:09:16,287 [main] INFO  com.bank.Main.BankApp - Account created successfully: 6, Name: kanishka, Email: kanishka@gmail.com, Balance: 10050.0
+2025-10-22 19:09:27,817 [main] WARN  com.bank.Main.BankApp - Account not found: 1
+2025-10-22 19:09:51,023 [main] INFO  com.bank.Main.BankApp - Report generated with 2 transactions.
+2025-10-22 19:09:51,063 [main] INFO  com.bank.service.ReportGenerator - ✅ TXT Report generated successfully: H:\PROJECTS\BankStimulation\reports\transactions_2025-10-22.txt
+2025-10-22 19:10:50,323 [main] INFO  com.bank.Main.BankApp - Bank Simulator exited by user.
+2025-10-22 21:02:52,474 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====

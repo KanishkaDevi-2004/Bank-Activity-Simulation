@@ -1,10 +1,13 @@
 package com.bank.util;
 
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LoggerUtil {
-    static {
-        PropertyConfigurator.configure("src/main/resources/log4j.properties");
+
+    // Returns a logger for a given class
+    public static Logger getLogger(Class<?> clazz) {
+        return LogManager.getLogger(clazz);
     }
 
     // Prevent instantiation
