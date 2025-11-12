@@ -17,9 +17,7 @@ public class AccountService {
     private final TransactionService transactionService = new TransactionService();
     private final EmailService emailService = new EmailService();
 
-
-
-    // ✅ Create Account (DB part unchanged)
+    // ✅ Create Account
     public int createAccount(String name, String password, String email, double balance) throws DatabaseException {
         try (Connection con = DBConnection.getConnection()) {
             PreparedStatement checkEmail = con.prepareStatement("SELECT COUNT(*) FROM accounts WHERE email = ?");
@@ -27,7 +25,7 @@ public class AccountService {
             ResultSet rs = checkEmail.executeQuery();
             rs.next();
             if (rs.getInt(1) > 0) {
-                System.out.println("⚠️ This email is already registered. Please use a different one.");
+                logger.warn("This email '{}' is already registered. Please use a different one.", email);
                 return -1;
             }
 
@@ -44,30 +42,31 @@ public class AccountService {
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) {
                 int accNo = keys.getInt(1);
-                System.out.println("✅ Account created successfully! Account Number: " + accNo);
-                logger.info("Account created successfully: {}", accNo);
+                logger.info("Account created successfully! Account Number: {}", accNo);
                 return accNo;
             } else {
                 throw new DatabaseException("Failed to retrieve generated account number.");
             }
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("⚠️ This email is already registered. Please use a different one.");
+            logger.warn("This email '{}' is already registered. Please use a different one.", email);
             return -1;
         } catch (SQLException e) {
-            throw new DatabaseException("⚠️ Could not create account. Please try again later.", e);
+            throw new DatabaseException("Could not create account. Please try again later.", e);
         }
     }
+
     // ✅ View Accounts
     public void viewAccounts(Scanner sc) {
         try (Connection con = DBConnection.getConnection()) {
-            System.out.println("\n1. View a Single Account");
-            System.out.println("2. View All Accounts");
-            System.out.print("Enter choice: ");
+            logger.info("1. View a Single Account");
+            logger.info("2. View All Accounts");
+            logger.info("Enter choice: ");
+
             int choice = InputValidator.getValidIntInput(sc);
 
             if (choice == 1) {
-                System.out.print("Enter Account Number: ");
+                logger.info("Enter Account Number: ");
                 int accNo = InputValidator.getValidIntInput(sc);
 
                 PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE account_no = ?");
@@ -75,37 +74,36 @@ public class AccountService {
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
-                    System.out.println("\n✅ Account Details");
-                    System.out.println("----------------------------------");
-                    System.out.println("Account No: " + rs.getInt("account_no"));
-                    System.out.println("Name       : " + rs.getString("name"));
-                    System.out.println("Email      : " + rs.getString("email"));
-                    System.out.println("Balance    : ₹" + rs.getDouble("balance"));
+                    logger.info("✅ Account Details:");
+                    logger.info("----------------------------------");
+                    logger.info("Account No: {}", rs.getInt("account_no"));
+                    logger.info("Name       : {}", rs.getString("name"));
+                    logger.info("Email      : {}", rs.getString("email"));
+                    logger.info("Balance    : ₹{}", rs.getDouble("balance"));
                 } else {
-                    System.out.println("❌ Account not found!");
+                    logger.warn("❌ Account not found!");
                 }
 
             } else if (choice == 2) {
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM accounts");
 
-                System.out.println("\n📋 All Accounts List");
-                System.out.println("----------------------------------");
+                logger.info("📋 All Accounts List");
+                logger.info("----------------------------------");
 
                 boolean found = false;
                 while (rs.next()) {
                     found = true;
-                    System.out.println(
-                            "Acc No: " + rs.getInt("account_no") +
-                                    " | Name: " + rs.getString("name") +
-                                    " | Email: " + rs.getString("email") +
-                                    " | Balance: ₹" + rs.getDouble("balance")
-                    );
+                    logger.info("Acc No: {} | Name: {} | Email: {} | Balance: ₹{}",
+                            rs.getInt("account_no"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getDouble("balance"));
                 }
 
-                if (!found) System.out.println("⚠ No accounts found.");
+                if (!found) logger.warn("⚠ No accounts found.");
             } else {
-                System.out.println("❌ Invalid option!");
+                logger.warn("❌ Invalid option entered while viewing accounts.");
             }
 
         } catch (SQLException e) {
@@ -116,30 +114,25 @@ public class AccountService {
     // ✅ Delete Menu
     public void deleteAccountMenu(Scanner sc) {
         try (Connection conn = DBConnection.getConnection()) {
-
-            System.out.println("\n--- Delete Account ---");
-            System.out.println("1. Delete Specific Account");
-            System.out.println("2. Delete All Accounts");
-            System.out.print("Enter your choice: ");
+            logger.info("--- Delete Account ---");
+            logger.info("1. Delete Specific Account");
+            logger.info("2. Delete All Accounts");
+            logger.info("Enter your choice: ");
             int choice = sc.nextInt();
 
             if (choice == 1) {
-                System.out.print("Enter Account Number to Delete: ");
+                logger.info("Enter Account Number to Delete: ");
                 int accountNo = sc.nextInt();
                 deleteAccount(accountNo);
             } else if (choice == 2) {
                 deleteAllAccounts();
-                // 🧠 After deleting all, return to main menu
-                System.out.println("Returning to main menu...");
                 logger.info("All accounts deleted. Returning to main menu.");
                 return;
             } else {
-                System.out.println("⚠️ Invalid choice! Please select 1 or 2.");
-                logger.warn("Invalid delete menu choice entered: {}", choice);
+                logger.warn("⚠ Invalid choice! Please select 1 or 2. Entered: {}", choice);
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Error while deleting account: " + e.getMessage());
             logger.error("SQL error while deleting account", e);
         }
     }
@@ -154,50 +147,42 @@ public class AccountService {
             int rows = stmt.executeUpdate();
 
             if (rows > 0) {
-                System.out.println("✅ Account deleted successfully.");
-                logger.info("Account {} deleted successfully.", accountNumber);
+                logger.info("✅ Account {} deleted successfully.", accountNumber);
             } else {
-                System.out.println("⚠️ Account not found.");
-                logger.warn("Attempted to delete non-existing account: {}", accountNumber);
+                logger.warn("⚠ Account {} not found.", accountNumber);
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Error deleting account: " + e.getMessage());
             logger.error("Error deleting account {}: {}", accountNumber, e.getMessage());
         }
     }
 
-    // ✅ Delete all accounts and reset numbering
+    // ✅ Delete all accounts
     public void deleteAllAccounts() {
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 
             int rows = stmt.executeUpdate("DELETE FROM accounts");
             if (rows > 0) {
-                System.out.println("✅ All accounts deleted successfully.");
-                logger.info("{} accounts deleted from database.", rows);
+                logger.info("✅ {} accounts deleted from database.", rows);
             } else {
-                System.out.println("⚠️ No accounts found to delete.");
-                logger.warn("No accounts found when trying to delete all.");
+                logger.warn("⚠ No accounts found to delete.");
             }
 
-            // Reset auto-increment
             stmt.executeUpdate("ALTER TABLE accounts AUTO_INCREMENT = 1");
-            System.out.println("🔄 Account numbering has been reset to start from 1.");
-            logger.info("Account numbering reset to 1 after deleting all accounts.");
+            logger.info("🔄 Account numbering reset to start from 1.");
 
         } catch (SQLException e) {
-            System.out.println("❌ Error deleting all accounts: " + e.getMessage());
             logger.error("Error deleting all accounts: {}", e.getMessage());
         }
     }
 
     // ✅ Deposit Money
     public void depositMoney(Scanner sc) {
-        System.out.print("Enter Account Number: ");
+        logger.info("Enter Account Number: ");
         int acc = InputValidator.getValidIntInput(sc);
 
-        System.out.print("Enter Amount: ");
+        logger.info("Enter Amount: ");
         double amt = InputValidator.getValidPositiveDouble(sc);
 
         try (Connection con = DBConnection.getConnection()) {
@@ -211,19 +196,20 @@ public class AccountService {
             if (rows == 0) throw new InvalidInputException("Account not found");
 
             con.commit();
-            System.out.println("✅ Amount Deposited Successfully!");
+            logger.info("✅ Amount ₹{} deposited successfully into account {}.", amt, acc);
             transactionService.logTransaction(con, acc, null, amt, "DEPOSIT", "Deposit successful");
+
         } catch (Exception e) {
-            System.out.println("❌ Deposit Failed: " + e.getMessage());
+            logger.error("❌ Deposit Failed: {}", e.getMessage());
         }
     }
 
     // ✅ Withdraw Money
     public void withdrawMoney(Scanner sc) {
-        System.out.print("Enter Account Number: ");
+        logger.info("Enter Account Number: ");
         int acc = InputValidator.getValidIntInput(sc);
 
-        System.out.print("Enter Amount: ");
+        logger.info("Enter Amount: ");
         double amt = InputValidator.getValidPositiveDouble(sc);
 
         try (Connection con = DBConnection.getConnection()) {
@@ -237,7 +223,7 @@ public class AccountService {
             String name = rs.getString("name");
 
             if (balance - amt < 100) {
-                System.out.println("❌ Minimum balance ₹100 must remain.");
+                logger.warn("❌ Minimum balance ₹100 must remain for account {}.", acc);
                 transactionService.logTransaction(con, acc, null, amt, "WITHDRAW", "Minimum balance rule violated");
                 return;
             }
@@ -248,28 +234,28 @@ public class AccountService {
             ps.executeUpdate();
 
             con.commit();
-            System.out.println("✅ Withdrawal Successful!");
-
+            logger.info("✅ Withdrawal of ₹{} from account {} successful.", amt, acc);
             transactionService.logTransaction(con, acc, null, amt, "WITHDRAW", "Withdrawal successful");
 
             if (balance - amt < 200) {
                 emailService.sendEmail(email, "⚠ Low Balance Alert",
                         "Dear " + name + ", your account balance is low. Maintain minimum ₹100.");
+                logger.warn("Low balance alert sent to {}", email);
             }
         } catch (Exception e) {
-            System.out.println("❌ Withdrawal Failed: " + e.getMessage());
+            logger.error("❌ Withdrawal Failed: {}", e.getMessage());
         }
     }
 
     // ✅ Transfer Money
     public void transferMoney(Scanner sc) {
-        System.out.print("Enter Sender Account: ");
+        logger.info("Enter Sender Account: ");
         int sender = InputValidator.getValidIntInput(sc);
 
-        System.out.print("Enter Receiver Account: ");
+        logger.info("Enter Receiver Account: ");
         int receiver = InputValidator.getValidIntInput(sc);
 
-        System.out.print("Enter Amount: ");
+        logger.info("Enter Amount: ");
         double amt = InputValidator.getValidPositiveDouble(sc);
 
         try (Connection con = DBConnection.getConnection()) {
@@ -280,7 +266,7 @@ public class AccountService {
             double bal = rs.getDouble(1);
 
             if (bal - amt < 100) {
-                System.out.println("❌ Minimum balance ₹100 must remain.");
+                logger.warn("❌ Minimum balance ₹100 must remain in sender account {}.", sender);
                 return;
             }
 
@@ -288,11 +274,11 @@ public class AccountService {
             con.prepareStatement("UPDATE accounts SET balance = balance + " + amt + " WHERE account_no = " + receiver).executeUpdate();
 
             con.commit();
-            System.out.println("✅ Transfer Successful!");
-
+            logger.info("✅ Transfer of ₹{} from account {} to account {} successful.", amt, sender, receiver);
             transactionService.logTransaction(con, sender, receiver, amt, "TRANSFER", "Transfer successful");
+
         } catch (Exception e) {
-            System.out.println("❌ Transfer Failed: " + e.getMessage());
+            logger.error("❌ Transfer Failed: {}", e.getMessage());
         }
     }
 }

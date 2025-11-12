@@ -18,10 +18,10 @@ public class ReportService {
     }
 
     public void generateReportOption(Scanner sc) {
-        System.out.println("\n===== 🧾 Generate Report =====");
-        System.out.println("1. Generate report for today’s transactions");
-        System.out.println("2. Generate report for All transactions");
-        System.out.print("Enter your choice: ");
+        logger.info("===== 🧾 Generate Report Menu =====");
+        logger.info("1. Generate report for today’s transactions");
+        logger.info("2. Generate report for all transactions");
+        logger.info("Awaiting user choice...");
 
         int option = InputValidator.getValidIntInput(sc);
         String reportType;
@@ -29,23 +29,23 @@ public class ReportService {
         switch (option) {
             case 1:
                 reportType = "TODAY";
+                logger.debug("User selected report type: TODAY");
                 break;
             case 2:
                 reportType = "ALL";
+                logger.debug("User selected report type: ALL");
                 break;
             default:
-                System.out.println("❌ Invalid option! Returning to main menu.");
+                logger.warn("Invalid option entered: {}. Returning to main menu.", option);
                 return;
         }
 
         try {
             List<Transaction> transactions = transactionService.getTransactions();
             ReportGenerator.generateReport(transactions, reportType);
-            System.out.println("✅ Report generated successfully! Check the 'reports' folder.");
-            logger.info("Report generated successfully for type: {}", reportType);
+            logger.info("✅ Report generated successfully. Type: {}. Check the 'reports' folder.", reportType);
         } catch (Exception e) {
-            System.out.println("⚠️ Failed to generate report: " + e.getMessage());
-            logger.error("Error generating report", e);
+            logger.error("⚠️ Failed to generate report of type {}: {}", reportType, e.getMessage(), e);
         }
     }
 }

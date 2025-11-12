@@ -19,7 +19,6 @@ public class TransactionService {
     // ✅ For ReportService
     public List<Transaction> getTransactions() {
         List<Transaction> list = new ArrayList<>();
-
         String sql = "SELECT id, sender_account, receiver_account, amount, transaction_type, message, created_at " +
                 "FROM transactions ORDER BY created_at DESC";
 
@@ -39,9 +38,10 @@ public class TransactionService {
                 );
                 list.add(t);
             }
+            logger.info("Fetched {} transactions from database.", list.size());
 
         } catch (Exception e) {
-            logger.error("❌ Error fetching transactions: {}", e.getMessage());
+            logger.error("Error fetching transactions: {}", e.getMessage(), e);
         }
         return list;
     }
@@ -54,7 +54,6 @@ public class TransactionService {
     // ✅ Log transaction to DB
     public void logTransaction(Connection con, Integer fromAcc, Integer toAcc, double amount,
                                String type, String message) {
-
         String sql = "INSERT INTO transactions (sender_account, receiver_account, amount, transaction_type, message) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
@@ -66,16 +65,11 @@ public class TransactionService {
             ps.setString(5, message);
             ps.executeUpdate();
 
-            // ✅ In-memory list (no status)
-            transactions.add(new Transaction(
-                    null, fromAcc, toAcc, amount, type, message, LocalDateTime.now()
-            ));
-
-            logger.info("✅ Transaction Logged | {} | From:{} | To:{} | Amount:{} | Msg:{}",
+            transactions.add(new Transaction(null, fromAcc, toAcc, amount, type, message, LocalDateTime.now()));
+            logger.info("Transaction logged | Type: {} | From: {} | To: {} | Amount: {} | Message: {}",
                     type, fromAcc, toAcc, amount, message);
-
         } catch (Exception e) {
-            logger.error("❌ Log Transaction Failed: {}", e.getMessage());
+            logger.error("Failed to log transaction: {}", e.getMessage(), e);
         }
     }
 
@@ -86,14 +80,17 @@ public class TransactionService {
         ps.setInt(1, accNo);
         ResultSet rs = ps.executeQuery();
 
-        if (!rs.next()) throw new AccountNotFoundException("Account not found!");
+        if (!rs.next()) {
+            logger.warn("Attempted to debit non-existent account: {}", accNo);
+            throw new AccountNotFoundException("Account not found!");
+        }
 
         double balance = rs.getDouble("balance");
         String email = rs.getString("email");
         String name = rs.getString("name");
 
         if (balance - amount < 100) {
-            System.out.println("❌ Minimum balance ₹100 must remain!");
+            logger.warn("Minimum balance violation for account {}. Current balance: {}", accNo, balance);
 
             if (email != null && !email.isEmpty()) {
                 new EmailService().sendEmail(
@@ -103,6 +100,7 @@ public class TransactionService {
                                 "Your withdrawal failed due to insufficient balance.\n" +
                                 "Current Balance: ₹" + balance
                 );
+                logger.info("Low balance alert email sent to {}", email);
             }
             return false;
         }
@@ -113,17 +111,18 @@ public class TransactionService {
         upd.setDouble(1, amount);
         upd.setInt(2, accNo);
         upd.executeUpdate();
-
+        logger.debug("Account {} debited ₹{}", accNo, amount);
         return true;
     }
 
     // ✅ Deposit
     public void deposit(Scanner sc) {
         try (Connection con = DBConnection.getConnection()) {
-            System.out.print("Enter Account No: ");
+            logger.info("Deposit operation initiated.");
+            logger.info("Awaiting account number input...");
             int accNo = InputValidator.getValidIntInput(sc);
 
-            System.out.print("Enter Deposit Amount: ");
+            logger.info("Awaiting deposit amount input...");
             double amt = InputValidator.getValidPositiveDouble(sc);
 
             PreparedStatement ps = con.prepareStatement(
@@ -132,34 +131,36 @@ public class TransactionService {
             ps.setDouble(1, amt);
             ps.setInt(2, accNo);
 
-            if (ps.executeUpdate() == 0) throw new AccountNotFoundException("Account Not Found!");
+            if (ps.executeUpdate() == 0) {
+                logger.warn("Deposit failed. Account not found: {}", accNo);
+                throw new AccountNotFoundException("Account Not Found!");
+            }
 
-            System.out.println("✅ Deposit Successful!");
             logTransaction(con, accNo, null, amt, "DEPOSIT", "Deposit successful");
+            logger.info("Deposit successful for account {}. Amount: ₹{}", accNo, amt);
 
         } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
+            logger.error("Deposit failed: {}", e.getMessage(), e);
         }
     }
 
     // ✅ Withdraw
     public void withdraw(Scanner sc) {
         try (Connection con = DBConnection.getConnection()) {
-            System.out.print("Enter Account No: ");
+            logger.info("Withdrawal operation initiated.");
             int accNo = InputValidator.getValidIntInput(sc);
-
-            System.out.print("Enter Withdrawal Amount: ");
             double amt = InputValidator.getValidPositiveDouble(sc);
 
             if (debitAccount(con, accNo, amt)) {
-                System.out.println("✅ Withdrawal Successful!");
                 logTransaction(con, accNo, null, amt, "WITHDRAW", "Withdrawal successful");
+                logger.info("Withdrawal successful for account {}. Amount: ₹{}", accNo, amt);
             } else {
                 logTransaction(con, accNo, null, amt, "WITHDRAW", "Insufficient balance");
+                logger.warn("Withdrawal failed due to insufficient balance for account {}", accNo);
             }
 
         } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
+            logger.error("Withdrawal failed: {}", e.getMessage(), e);
         }
     }
 
@@ -167,24 +168,21 @@ public class TransactionService {
     public void transfer(Scanner sc) {
         try (Connection con = DBConnection.getConnection()) {
             con.setAutoCommit(false);
+            logger.info("Transfer operation initiated.");
 
-            System.out.print("Enter Sender Account No: ");
             int sender = InputValidator.getValidIntInput(sc);
-
-            System.out.print("Enter Receiver Account No: ");
             int receiver = InputValidator.getValidIntInput(sc);
+            double amt = InputValidator.getValidPositiveDouble(sc);
 
             if (sender == receiver) {
-                System.out.println("❌ Cannot transfer to same account!");
+                logger.warn("Transfer attempt between same accounts: {}", sender);
                 return;
             }
-
-            System.out.print("Enter Amount: ");
-            double amt = InputValidator.getValidPositiveDouble(sc);
 
             if (!debitAccount(con, sender, amt)) {
                 logTransaction(con, sender, receiver, amt, "TRANSFER", "Insufficient balance");
                 con.rollback();
+                logger.warn("Transfer aborted due to insufficient balance in account {}", sender);
                 return;
             }
 
@@ -194,15 +192,18 @@ public class TransactionService {
             credit.setDouble(1, amt);
             credit.setInt(2, receiver);
 
-            if (credit.executeUpdate() == 0)
+            if (credit.executeUpdate() == 0) {
+                con.rollback();
+                logger.warn("Receiver account not found: {}", receiver);
                 throw new AccountNotFoundException("Receiver Account Not Found!");
+            }
 
             con.commit();
-            System.out.println("✅ Transfer Successful!");
             logTransaction(con, sender, receiver, amt, "TRANSFER", "Transfer successful");
+            logger.info("Transfer successful. From: {} To: {} Amount: ₹{}", sender, receiver, amt);
 
         } catch (Exception e) {
-            System.out.println("❌ Transfer Failed: " + e.getMessage());
+            logger.error("Transfer failed: {}", e.getMessage(), e);
         }
     }
 }
