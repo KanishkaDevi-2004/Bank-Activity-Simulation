@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Console output (clean and readable) -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5p - %m%n"/>
+        </Console>
+
+        <!-- File output (same simple format) -->
+        <File name="FileLogger" fileName="bankapp.log" append="true">
+            <PatternLayout pattern="%-5p - %m%n"/>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <!-- Application logger for your project -->
+        <Logger name="com.bank" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
+        </Logger>
+
+        <!-- Root logger -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
+        </Root>
+    </Loggers>
+</Configuration>

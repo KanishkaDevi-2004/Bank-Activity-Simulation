@@ -18,17 +18,12 @@ public class BankApp {
 
     public void start() {
         logger.info("===== Bank Activity Simulator Started =====");
-        logger.info("==================================");
-        logger.info("     🏦 Bank Activity Simulator    ");
-        logger.info("==================================");
+        logger.info("🏦 Welcome to the Bank Activity Simulator");
 
         while (true) {
             try {
-                logger.info("\nChoose an option:");
-                logger.info("1. Login");
-                logger.info("2. Create Account");
-                logger.info("3. Exit");
-                logger.info("Enter your choice: ");
+                logger.info("Choose an option:\n1. Login\n2. Create Account\n3. Exit");
+                logger.info("Awaiting user input...");
 
                 int choice = InputValidator.getValidIntInput(sc);
 
@@ -40,118 +35,127 @@ public class BankApp {
                         createNewUser();
                         break;
                     case 3:
-                        logger.info("👋 Thank you for using Bank Simulator!");
-                        logger.info("User exited the simulator.");
+                        logger.info("👋 Thank you for using Bank Simulator! Exiting...");
                         return;
                     default:
-                        logger.warn("❌ Invalid choice! Please enter a valid option (1–3).");
-                        break;
+                        logger.warn("Invalid choice entered: {}", choice);
                 }
 
             } catch (InputMismatchException e) {
-                logger.warn("⚠️ Invalid input type. Please enter numbers only for menu options.", e);
                 sc.nextLine();
+                logger.warn("Invalid input type. Expected number, got non-numeric input.", e);
             } catch (DatabaseException e) {
-                logger.error("⚠️ Database Exception while processing user request.", e);
+                logger.error("Database connection error encountered.", e);
             } catch (Exception e) {
-                logger.error("⚠️ Unexpected Exception occurred.", e);
+                logger.error("Unexpected error in main menu.", e);
             }
         }
     }
 
     private void loginUser() throws DatabaseException {
-        logger.info("Enter Name: ");
+        logger.info("User selected: Login");
+
+        logger.info("Requesting username and password input.");
+        System.out.print("Enter Name: ");
         String name = sc.nextLine().trim();
-        logger.info("Enter Password: ");
+        System.out.print("Enter Password: ");
         String password = sc.nextLine().trim();
 
+        logger.debug("Attempting login for user: {}", name);
+
         if (authService.login(name, password)) {
-            logger.info("✅ Login successful! Welcome, {}", name);
+            logger.info("✅ Login successful for user: {}", name);
             showUserMenu();
         } else {
-            logger.warn("❌ Invalid name or password attempt for user: {}", name);
+            logger.warn("❌ Invalid credentials entered for username: {}", name);
         }
     }
 
     private void createNewUser() throws DatabaseException {
+        logger.info("User selected: Create Account");
+
         while (true) {
             try {
-                logger.info("Enter Name (letters only): ");
+                logger.info("Collecting account creation details...");
+
+                System.out.print("Enter Name (letters only): ");
                 String name = sc.nextLine().trim();
                 if (!name.matches("[a-zA-Z ]+")) {
-                    logger.warn("⚠️ Invalid name! Only alphabets and spaces are allowed. Input: {}", name);
+                    logger.warn("Invalid name input: {}", name);
                     continue;
                 }
 
-                logger.info("Enter Password: ");
+                System.out.print("Enter Password: ");
                 String password = sc.nextLine().trim();
 
                 String email;
                 while (true) {
-                    logger.info("Enter Email: ");
+                    System.out.print("Enter Email: ");
                     email = sc.nextLine().trim();
-
                     if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                        logger.warn("⚠️ Invalid email format! Input: {}", email);
+                        logger.warn("Invalid email format entered: {}", email);
                         continue;
                     }
                     break;
                 }
 
-                double balance = 0.0;
+                double balance;
                 while (true) {
-                    logger.info("Enter Initial Balance (min ₹100): ");
+                    System.out.print("Enter Initial Balance (min ₹100): ");
                     String balanceInput = sc.nextLine().trim();
-
                     try {
                         balance = Double.parseDouble(balanceInput);
                     } catch (NumberFormatException e) {
-                        logger.warn("❌ Invalid input. Please enter a numeric value. Input: {}", balanceInput);
+                        logger.warn("Non-numeric balance input: {}", balanceInput);
                         continue;
                     }
 
                     if (balance < 100) {
-                        logger.warn("⚠️ Minimum balance should be ₹100. Entered: {}", balance);
+                        logger.warn("Balance below minimum limit: {}", balance);
                         continue;
                     }
                     break;
                 }
 
-                logger.info("Attempting to create account for user: {}", name);
+                logger.info("Attempting to create new account for: {}", name);
                 int accountId = accountService.createAccount(name, password, email, balance);
 
                 if (accountId != -1) {
-                    logger.info("🎉 Account created successfully for user: {} | Account Number: {}", name, accountId);
-                    loginUser(); // directly log user in after creation
+                    logger.info("🎉 Account successfully created for {} (Account ID: {})", name, accountId);
+                    loginUser(); // automatically login after creation
                 } else {
-                    logger.error("⚠️ Account creation failed for user: {}", name);
+                    logger.error("Account creation failed for user: {}", name);
                 }
 
                 break;
 
             } catch (DatabaseException e) {
-                logger.error("⚠️ Database issue occurred while creating account.", e);
+                logger.error("Database exception during account creation.", e);
                 break;
             } catch (Exception e) {
-                logger.error("⚠️ Unexpected exception during account creation.", e);
+                logger.error("Unexpected error during account creation.", e);
             }
         }
     }
 
     private void showUserMenu() throws DatabaseException {
+        logger.info("Displaying user banking menu...");
+
         while (true) {
-            logger.info("\n--- Banking Options ---");
-            logger.info("1. Deposit Money");
-            logger.info("2. Withdraw Money");
-            logger.info("3. View Account");
-            logger.info("4. Generate Report");
-            logger.info("5. Transfer Money");
-            logger.info("6. Delete Account");
-            logger.info("7. Logout");
-            logger.info("Enter your choice: ");
+            logger.info(
+                    "--- Banking Options ---\n" +
+                            "1. Deposit Money\n" +
+                            "2. Withdraw Money\n" +
+                            "3. View Account\n" +
+                            "4. Generate Report\n" +
+                            "5. Transfer Money\n" +
+                            "6. Delete Account\n" +
+                            "7. Logout\n"
+            );
 
             try {
                 int choice = InputValidator.getValidIntInput(sc);
+                logger.debug("User menu choice: {}", choice);
 
                 switch (choice) {
                     case 1:
@@ -164,8 +168,7 @@ public class BankApp {
                         accountService.viewAccounts(sc);
                         break;
                     case 4:
-                        ReportService reportService = new ReportService(transactionService);
-                        reportService.generateReportOption(sc);
+                        new ReportService(transactionService).generateReportOption(sc);
                         break;
                     case 5:
                         transactionService.transfer(sc);
@@ -174,20 +177,20 @@ public class BankApp {
                         accountService.deleteAccountMenu(sc);
                         break;
                     case 7:
-                        logger.info("🔒 Logged out successfully.");
+                        logger.info("🔒 User logged out successfully.");
                         return;
                     default:
-                        logger.warn("❌ Invalid choice! Please enter a valid option (1–7).");
+                        logger.warn("Invalid menu option entered: {}", choice);
                         break;
                 }
 
             } catch (InputMismatchException e) {
-                logger.warn("⚠️ Please enter a valid number for the menu option.", e);
                 sc.nextLine();
+                logger.warn("Invalid numeric input in user menu.", e);
             } catch (DatabaseException e) {
-                logger.error("⚠️ Database issue occurred in user menu.", e);
+                logger.error("Database exception in user menu.", e);
             } catch (Exception e) {
-                logger.error("⚠️ Unexpected exception in user menu.", e);
+                logger.error("Unexpected exception in user menu.", e);
             }
         }
     }

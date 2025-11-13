@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="com.bank.Main.Main" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="MAIN_CLASS_NAME" value="com.bank.Main.Main" />
+    <module name="BankStimulation" />
+    <selectedOptions>
+      <option name="environmentVariables" visible="false" />
+    </selectedOptions>
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.bank.Main.*" />
+        <option name="ENABLED" value="false" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

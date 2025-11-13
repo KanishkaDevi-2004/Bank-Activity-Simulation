@@ -18,34 +18,29 @@ public class ReportService {
     }
 
     public void generateReportOption(Scanner sc) {
-        logger.info("===== 🧾 Generate Report Menu =====");
+        logger.info("===== Generate Report Menu =====");
         logger.info("1. Generate report for today’s transactions");
         logger.info("2. Generate report for all transactions");
-        logger.info("Awaiting user choice...");
+        logger.info("Enter your choice:");
 
         int option = InputValidator.getValidIntInput(sc);
         String reportType;
 
-        switch (option) {
-            case 1:
-                reportType = "TODAY";
-                logger.debug("User selected report type: TODAY");
-                break;
-            case 2:
-                reportType = "ALL";
-                logger.debug("User selected report type: ALL");
-                break;
-            default:
-                logger.warn("Invalid option entered: {}. Returning to main menu.", option);
-                return;
+        if (option == 1) {
+            reportType = "TODAY";
+        } else if (option == 2) {
+            reportType = "ALL";
+        } else {
+            logger.warn("Invalid option entered. Returning to main menu.");
+            return;
         }
 
         try {
             List<Transaction> transactions = transactionService.getTransactions();
             ReportGenerator.generateReport(transactions, reportType);
-            logger.info("✅ Report generated successfully. Type: {}. Check the 'reports' folder.", reportType);
+            logger.info("✅ Report generated successfully for type: {}. Check the 'reports' folder.", reportType);
         } catch (Exception e) {
-            logger.error("⚠️ Failed to generate report of type {}: {}", reportType, e.getMessage(), e);
+            logger.error("⚠️ Failed to generate report: {}", e.getMessage());
         }
     }
 }

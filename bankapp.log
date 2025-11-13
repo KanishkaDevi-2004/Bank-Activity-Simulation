@@ -126,3 +126,128 @@ java.sql.SQLSyntaxErrorException: Unknown column 'email' in 'where clause'
 2025-10-22 19:09:51,063 [main] INFO  com.bank.service.ReportGenerator - ✅ TXT Report generated successfully: H:\PROJECTS\BankStimulation\reports\transactions_2025-10-22.txt
 2025-10-22 19:10:50,323 [main] INFO  com.bank.Main.BankApp - Bank Simulator exited by user.
 2025-10-22 21:02:52,474 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-11-13 14:11:52,502 [main] INFO  com.bank.Main.BankApp - ===== Bank Activity Simulator Started =====
+2025-11-13 14:11:52,509 [main] INFO  com.bank.Main.BankApp - 🏦 Welcome to the Bank Activity Simulator
+2025-11-13 14:11:52,511 [main] INFO  com.bank.Main.BankApp - Choose an option:
+1. Login
+2. Create Account
+3. Exit
+2025-11-13 14:11:52,512 [main] INFO  com.bank.Main.BankApp - Awaiting user input...
+INFO  - ===== Bank Activity Simulator Started =====
+INFO  - 🏦 Welcome to the Bank Activity Simulator
+INFO  - Choose an option:
+1. Login
+2. Create Account
+3. Exit
+INFO  - Awaiting user input...
+INFO  - ===== Bank Activity Simulator Started =====
+INFO  - 🏦 Welcome to the Bank Activity Simulator
+INFO  - Choose an option:
+1. Login
+2. Create Account
+3. Exit
+INFO  - Awaiting user input...
+INFO  - ===== Bank Activity Simulator Started =====
+INFO  - 🏦 Welcome to the Bank Activity Simulator
+INFO  - Choose an option:
+1. Login
+2. Create Account
+3. Exit
+INFO  - Awaiting user input...
+INFO  - ===== Bank Activity Simulator Started =====
+INFO  - 🏦 Welcome to the Bank Activity Simulator
+INFO  - Choose an option:
+1. Login
+2. Create Account
+3. Exit
+INFO  - Awaiting user input...
+INFO  - User selected: Create Account
+INFO  - Collecting account creation details...
+INFO  - ===== Bank Activity Simulator Started =====
+INFO  - 🏦 Welcome to the Bank Activity Simulator
+INFO  - Choose an option:
+1. Login
+2. Create Account
+3. Exit
+INFO  - Awaiting user input...
+INFO  - User selected: Login
+INFO  - Requesting username and password input.
+INFO  - Attempting login for user: Kanishka
+WARN  - ⚠️ Login failed for user: Kanishka
+WARN  - ❌ Invalid credentials entered for username: Kanishka
+INFO  - Choose an option:
+1. Login
+2. Create Account
+3. Exit
+INFO  - Awaiting user input...
+INFO  - User selected: Login
+INFO  - Requesting username and password input.
+INFO  - Attempting login for user: Kanishka Devi
+INFO  - ✅ Login successful for user: Kanishka Devi
+INFO  - ✅ Login successful for user: Kanishka Devi
+INFO  - Displaying user banking menu...
+INFO  - --- Banking Options ---
+1. Deposit Money
+2. Withdraw Money
+3. View Account
+4. Generate Report
+5. Transfer Money
+6. Delete Account
+7. Logout
+
+INFO  - Enter Sender Account No: 
+INFO  - Enter Receiver Account No: 
+INFO  - Enter Amount: 
+WARN  - ❌ Minimum balance ₹100 must remain!
+INFO  - ✅ Email sent successfully to kanishkadevir@gmail.com
+INFO  - ✅ Transaction Logged | TRANSFER | From:1 | To:3 | Amount:1000.0 | Msg:Insufficient balance
+INFO  - --- Banking Options ---
+1. Deposit Money
+2. Withdraw Money
+3. View Account
+4. Generate Report
+5. Transfer Money
+6. Delete Account
+7. Logout
+
+INFO  - 
+1. View a Single Account
+INFO  - 2. View All Accounts
+INFO  - Enter choice: 
+INFO  - 
+📋 All Accounts List
+INFO  - ----------------------------------
+INFO  - Acc No: 1 | Name: Kanishka Devi | Email: kanishkadevir@gmail.com | Balance: ₹700.0
+INFO  - Acc No: 2 | Name: kanishka | Email: kanishka@gmail.com | Balance: ₹400.0
+INFO  - Acc No: 3 | Name: kanish | Email: kanish@gmail.com | Balance: ₹500.0
+INFO  - Acc No: 4 | Name: devi | Email: devi@gmail.com | Balance: ₹10000.0
+INFO  - --- Banking Options ---
+1. Deposit Money
+2. Withdraw Money
+3. View Account
+4. Generate Report
+5. Transfer Money
+6. Delete Account
+7. Logout
+
+INFO  - 
+1. View a Single Account
+INFO  - 2. View All Accounts
+INFO  - Enter choice: 
+INFO  - Enter Account Number: 
+INFO  - 
+✅ Account Details
+INFO  - ----------------------------------
+INFO  - Account No: 1
+INFO  - Name       : Kanishka Devi
+INFO  - Email      : kanishkadevir@gmail.com
+INFO  - Balance    : ₹700.0
+INFO  - --- Banking Options ---
+1. Deposit Money
+2. Withdraw Money
+3. View Account
+4. Generate Report
+5. Transfer Money
+6. Delete Account
+7. Logout
+
