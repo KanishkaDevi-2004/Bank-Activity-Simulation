@@ -5,18 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b4187832-304a-45aa-8fcd-cea491dab9e5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bankapp.log" beforeDir="false" afterPath="$PROJECT_DIR$/bankapp.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bank/Main/BankApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bank/Main/BankApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bank/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bank/service/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bank/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bank/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bank/service/InputValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bank/service/InputValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bank/service/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bank/service/ReportService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bank/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bank/service/TransactionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENCE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
